@@ -6,9 +6,9 @@
     $ python3 -m venv  venv
 
     win:
-       $ myvenv\Scripts\activate
+       $ venv\Scripts\activate
     osx :
-       $ source myvenv\bin\activate
+       $ source venv\bin\activate
         
 ```
 ## Migrate && Runserver:
