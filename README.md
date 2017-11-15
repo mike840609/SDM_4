@@ -26,3 +26,11 @@
 ```bash
     pip freeze > requirements.txt
 ```
+
+
+## Run on NTU　Server:
+```bash
+    python manage.py runserver 0.0.00:8000
+```
+
+https://140.112.107.237:8000
