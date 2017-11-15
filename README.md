@@ -33,4 +33,4 @@
     python manage.py runserver 0.0.00:8000
 ```
 
-https://140.112.107.237:8000
+browser url : https://140.112.107.237:8000
