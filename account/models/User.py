@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-
+from itertools import chain
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(primary_key=True, unique=True)
     name = models.CharField(max_length=16)
 
-    create = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField(auto_now_add=True)
     last_modify = models.DateTimeField(auto_now=True)
 
     is_active = models.BooleanField(default=True)
@@ -51,3 +51,23 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.name
+
+    @property
+    def friends(self):
+        friend_list = list(
+            chain(
+                    self.friends_1.all(),
+                    self.friends_2.all()
+                )
+            )
+
+        friends = []
+        for friend in friend_list:
+            friends.append({
+                    'name': friend.user2.name if friend.user1 == self.email else friend.user1.name,
+                    'email': friend.user2.email if friend.user1 == self.email else friend.user1.email,
+                    'created': friend.created,
+                    'last_modify':friend.last_modify
+                })
+
+        return friends
