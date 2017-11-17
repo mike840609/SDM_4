@@ -1,7 +1,7 @@
 from django.shortcuts import render
 
-from friend.models import Friend
-from friend.serializers import FriendSerializer
+from account.models import Friend
+from account.serializers import FriendSerializer
 
 from rest_framework import viewsets
 
