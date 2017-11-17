@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
 from itertools import chain
@@ -25,7 +27,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(primary_key=True, unique=True)
+    id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+
+    email = models.EmailField(unique=True)
     name = models.CharField(max_length=16)
 
     created = models.DateTimeField(auto_now_add=True)
