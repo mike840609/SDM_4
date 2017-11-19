@@ -23,7 +23,7 @@ router = DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'friends', views.FriendViewSet)
 
-users_router = routers.NestedSimpleRouter(router, r'users', lookup='user')
+users_router = routers.NestedSimpleRouter(router, r'users', lookup='owner')
 users_router.register(r'holders', views.FakeUserViewSet)
 
 urlpatterns = [
