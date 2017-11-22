@@ -66,10 +66,16 @@ class User(AbstractBaseUser, PermissionsMixin):
             )
 
         friends = []
+        
+        
         for friend in friend_list:
+            # print ("================")
+            # print (friend.user1.email)
+            # print (friend.user2.email)
+            
             friends.append({
-                    'name': friend.user2.name if friend.user1 == self.email else friend.user1.name,
-                    'email': friend.user2.email if friend.user1 == self.email else friend.user1.email,
+                    'name': friend.user2.name if friend.user1.email == self.email else friend.user1.name,
+                    'email': friend.user2.email if friend.user1.email == self.email else friend.user1.email,
                     'created': friend.created,
                     'last_modify':friend.last_modify
                 })
