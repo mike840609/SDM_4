@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['140.112.107.237','localhost','127.0.0.1' ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 
 # Application definition
 
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    
+    'corsheaders',
 
     #  pip install
     'rest_framework',
@@ -53,6 +58,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 AUTH_USER_MODEL = 'account.User'
