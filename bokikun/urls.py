@@ -29,5 +29,6 @@ users_router.register(r'holders', views.FakeUserViewSet)
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),
-    url(r'^api/', include(users_router.urls))
+    url(r'^api/', include(users_router.urls)),
+    url(r'^auth/', include('rest_framework_social_oauth2.urls')),
 ]
