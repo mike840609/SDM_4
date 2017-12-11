@@ -2,22 +2,21 @@ import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
-from itertools import chain
+
 
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, password, **kwargs):
+    def _create_user(self, email, name, user_fb_id, *args, **kwargs):
         if not email:
             raise ValueError('The given email must be set')
         email = self.normalize_email(email)
-        user = self.model(email=email, **kwargs)
-        user.set_password(password)
+        user = self.model(email=email, name=name, user_fb_id=user_fb_id)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, password=None, **kwargs):
-        return self._create_user(email, password, **kwargs)
+    def create_user(self, email, username, uid, **kwargs):
+        return self._create_user(email, name=username, user_fb_id=uid, **kwargs)
 
     def create_superuser(self, email, password, **kwargs):
         kwargs.setdefault('is_staff', True)
@@ -28,6 +27,8 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(default=uuid.uuid4, primary_key=True, unique=True)
+
+    user_fb_id = models.CharField(max_length=64)
 
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=16)
@@ -42,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name']
+    REQUIRED_FIELDS = ['name', 'user_fb_id']
 
     class Meta:
         db_table = 'users'
@@ -55,29 +56,3 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def get_short_name(self):
         return self.name
-
-    @property
-    def friends(self):
-        friend_list = list(
-            chain(
-                    self.friends_1.all(),
-                    self.friends_2.all()
-                )
-            )
-
-        friends = []
-        
-        
-        for friend in friend_list:
-            # print ("================")
-            # print (friend.user1.email)
-            # print (friend.user2.email)
-            
-            friends.append({
-                    'name': friend.user2.name if friend.user1.email == self.email else friend.user1.name,
-                    'email': friend.user2.email if friend.user1.email == self.email else friend.user1.email,
-                    'created': friend.created,
-                    'last_modify':friend.last_modify
-                })
-
-        return friends
