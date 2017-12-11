@@ -2,8 +2,8 @@ from django.db import models
 
 
 class Friend(models.Model):
-    user1 = models.ForeignKey('account.User', on_delete=models.CASCADE, related_name='friends_1')
-    user2 = models.ForeignKey('account.User', on_delete=models.CASCADE, related_name='friends_2')
+    user1 = models.ForeignKey('account.User', on_delete=models.CASCADE, related_name='friends')
+    user2 = models.ForeignKey('account.User', on_delete=models.CASCADE, related_name='+')
     last_modify = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
