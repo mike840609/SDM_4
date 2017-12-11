@@ -20,15 +20,16 @@ from rest_framework_nested import routers
 from account import views
 
 router = DefaultRouter()
-router.register(r'users', views.UserViewSet)
-router.register(r'friends', views.FriendViewSet)
+router.register(r'users', views.UserViewSet, base_name='users')
+router.register(r'friends', views.FriendViewSet, base_name='friends')
 
 users_router = routers.NestedSimpleRouter(router, r'users', lookup='owner')
 users_router.register(r'holders', views.FakeUserViewSet)
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    url(r'^api/users/me', views.MeView.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/', include(users_router.urls)),
     url(r'^auth/', include('rest_framework_social_oauth2.urls')),
+    url(r'^admin/', admin.site.urls),
 ]
