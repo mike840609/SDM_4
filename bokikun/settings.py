@@ -40,11 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    
-    'corsheaders',
-
     #  pip install
     'rest_framework',
+    'corsheaders',
 
     # api application
     'account',
@@ -96,6 +94,9 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
         'rest_framework_social_oauth2.authentication.SocialAuthentication',
     ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -111,12 +112,32 @@ AUTHENTICATION_BACKENDS = (
     'django.contrib.auth.backends.ModelBackend',
 )
 
-SOCIAL_AUTH_FACEBOOK_KEY = '901769249996732'
-SOCIAL_AUTH_FACEBOOK_SECRET = 'cfc4be44476d36ca619feeaeadfae5f2'
+
+# SOCIAL AUTH Settings
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.auth_allowed',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.user.user_details',
+)
+
+SOCIAL_AUTH_FACEBOOK_API_VERSION = '2.11'
+
+SOCIAL_AUTH_FACEBOOK_KEY = '1886825801345139'
+SOCIAL_AUTH_FACEBOOK_SECRET = '64766b9c0aa4f315bcf7b030baedc8c7'
+
 WSGI_APPLICATION = 'bokikun.wsgi.application'
+
+USER_FIELDS = ['email', 'username', 'uid']
+
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
-    'fields': 'id, name, email'
+    'fields': 'id,email,name'
 }
 
 # Database
