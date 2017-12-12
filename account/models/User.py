@@ -7,22 +7,23 @@ from django.db import models
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def _create_user(self, email, name, user_fb_id, *args, **kwargs):
+    def create_user(self, email, username, uid, **kwargs):
         if not email:
-            raise ValueError('The given email must be set')
+            raise ValueError('The given email must be set.')
         email = self.normalize_email(email)
-        user = self.model(email=email, name=name, user_fb_id=user_fb_id)
+        user = self.model(email=email, name=username, user_fb_id=uid, **kwargs)
         user.save(using=self._db)
         return user
 
-    def create_user(self, email, username, uid, **kwargs):
-        return self._create_user(email, name=username, user_fb_id=uid, **kwargs)
-
-    def create_superuser(self, email, password, **kwargs):
+    def create_superuser(self, email, password, name, user_fb_id, **kwargs):
         kwargs.setdefault('is_staff', True)
         kwargs.setdefault('is_superuser', True)
 
-        return self._create_user(email, password, **kwargs)
+        email = self.normalize_email(email)
+        user = self.model(email=email, name=name, user_fb_id=user_fb_id, **kwargs)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
 
 class User(AbstractBaseUser, PermissionsMixin):
