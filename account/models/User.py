@@ -7,23 +7,42 @@ from django.db import models
 class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, email, username, uid, **kwargs):
+    def _adjust_field(self, kwargs):
+        if 'username' in kwargs:
+            kwargs['name'] = kwargs['username']
+            kwargs.pop('username')
+        if 'uid' in kwargs:
+            kwargs['user_fb_id'] = kwargs['uid']
+            kwargs.pop('uid')
+
+        return kwargs
+
+    def _create_user(self, email, password=None, **kwargs):
+        kwargs = self._adjust_field(kwargs)
         if not email:
             raise ValueError('The given email must be set.')
         email = self.normalize_email(email)
-        user = self.model(email=email, name=username, user_fb_id=uid, **kwargs)
-        user.save(using=self._db)
-        return user
-
-    def create_superuser(self, email, password, name, user_fb_id, **kwargs):
-        kwargs.setdefault('is_staff', True)
-        kwargs.setdefault('is_superuser', True)
-
-        email = self.normalize_email(email)
-        user = self.model(email=email, name=name, user_fb_id=user_fb_id, **kwargs)
+        user = self.model(email=email, **kwargs)
         user.set_password(password)
         user.save(using=self._db)
         return user
+
+    def get(self, **kwargs):
+        kwargs = self._adjust_field(kwargs)
+        return super(UserManager, self).get(**kwargs)
+
+    def filter(self, **kwargs):
+        kwargs = self._adjust_field(kwargs)
+        return super(UserManager, self).filter(**kwargs)
+
+    def create_user(self, email, **kwargs):
+        return self._create_user(email, **kwargs)
+
+    def create_superuser(self, email, password, **kwargs):
+        kwargs.setdefault('is_staff', True)
+        kwargs.setdefault('is_superuser', True)
+
+        return self._create_user(email, password, **kwargs)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
