@@ -27,6 +27,7 @@ users_router = routers.NestedSimpleRouter(router, r'users', lookup='owner')
 users_router.register(r'holders', views.FakeUserViewSet)
 
 urlpatterns = [
+    url(r'^api/access', views.AccessView.as_view()),
     url(r'^api/users/me', views.MeView.as_view()),
     url(r'^api/', include(router.urls)),
     url(r'^api/', include(users_router.urls)),

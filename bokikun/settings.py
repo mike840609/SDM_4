@@ -140,6 +140,8 @@ SOCIAL_AUTH_FACEBOOK_PROFILE_EXTRA_PARAMS = {
     'fields': 'id,email,name'
 }
 
+FACEBOOK_REDIRECT_URI = 'https://140.112.107.237:8000/api/access'
+
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 
